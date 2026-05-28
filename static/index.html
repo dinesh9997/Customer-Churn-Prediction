@@ -1414,7 +1414,11 @@
 
     <script>
         // Backend API configuration
-        const API_BASE_URL = 'http://localhost:5000'; // Change this if your backend runs on different port/host
+        // Automatically use current origin if served directly from Flask on a custom port,
+        // otherwise default to http://localhost:5000.
+        const API_BASE_URL = (window.location.protocol.startsWith('http') && window.location.port !== '5500')
+            ? window.location.origin
+            : 'http://localhost:5000';
         
         // Form validation and interactivity
         document.addEventListener('DOMContentLoaded', function() {
