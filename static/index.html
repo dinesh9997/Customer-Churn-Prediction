@@ -3,60 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <title>Customer Churn Prediction</title>
+    <meta name="color-scheme" content="light">
+    <title>churn.ai — Customer Churn Prediction</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            /* Light mode colors - vibrant and attractive */
-            --bg-primary: #fefefe;
-            --bg-secondary: #f0f7ff;
+            /* Warm, minimal, high-end SaaS palette */
+            --bg-page: #FAF9F6;
             --bg-card: #ffffff;
-            --text-primary: #172554;
-            --text-secondary: #5a67d8;
-            --border-color: #cbd5e1;
-            --accent-color: #4f46e5;
-            --accent-hover: #3730a3;
-            --success-color: #059669;
-            --error-color: #dc2626;
-            --warning-color: #d97706;
-            --shadow: 0 3px 5px 0 rgb(0 0 0 / 0.12), 0 2px 3px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 12px 18px -4px rgb(0 0 0 / 0.12), 0 6px 8px -4px rgb(0 0 0 / 0.1);
-            --gradient-accent: linear-gradient(135deg, #4f46e5, #059669);
-            /* Section-specific colors */
-            --personal-bg: #e6f3ff;
-            --phone-bg: #fefcbf;
-            --internet-bg: #e6ffed;
-            --billing-bg: #ffe6e6;
-            /* Input-specific colors */
-            --input-bg: #ffffff;
-            --input-border: linear-gradient(135deg, #4f46e5, #10b981);
-            --input-focus-glow: rgba(79, 70, 229, 0.2);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                /* Dark mode colors - vibrant and cohesive */
-                --bg-primary: #1e1b4b;
-                --bg-secondary: #2d3157;
-                --bg-card: #2d3157;
-                --text-primary: #e0e7ff;
-                --text-secondary: #a5b4fc;
-                --border-color: #4b5563;
-                --accent-color: #6366f1;
-                --accent-hover: #4f46e5;
-                --success-color: #10b981;
-                --error-color: #ef4444;
-                --warning-color: #f59e0b;
-                /* Dark mode section-specific colors */
-                --personal-bg: #2c3e50;
-                --phone-bg: #4c2c2c;
-                --internet-bg: #2c4c3e;
-                --billing-bg: #4c2c4c;
-                /* Dark mode input-specific colors */
-                --input-bg: #3b3f66;
-                --input-border: linear-gradient(135deg, #6366f1, #10b981);
-                --input-focus-glow: rgba(99, 102, 241, 0.3);
-            }
+            --color-text-primary: #111111;
+            --color-text-secondary: #5F5E5B;
+            --color-text-muted: #8E8D8A;
+            
+            --border-color: #E6E4DF;
+            --border-focus: #111111;
+            
+            --accent-gold: #c69c3a;
+            --accent-blue: #3182ce;
+            --accent-gold-light: rgba(246, 211, 101, 0.45);
+            --accent-blue-light: rgba(79, 172, 254, 0.35);
+            
+            --color-success: #0d9488;
+            --color-error: #e11d48;
+            --color-warning: #ea580c;
+            
+            --shadow-sm: 0 2px 8px rgba(17, 17, 17, 0.02);
+            --shadow-md: 0 10px 30px rgba(17, 17, 17, 0.04);
+            --shadow-lg: 0 20px 50px rgba(17, 17, 17, 0.06);
+            
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            
+            --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -66,1640 +48,1467 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('https://images.unsplash.com/photo-1516321310765-0e7b3f0dc5df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80') no-repeat center center fixed;
-            background-size: cover;
-            background-color: var(--bg-primary); /* Fallback gradient */
-            color: var(--text-primary);
-            line-height: 1.6;
+            font-family: var(--font-sans);
+            background-color: var(--bg-page);
+            color: var(--color-text-primary);
+            line-height: 1.5;
             min-height: 100vh;
-            position: relative;
-            /* Alternative solid color background */
-            /* background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); */
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.85); /* Light overlay for readability */
-            z-index: -1;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            body::before {
-                background: rgba(30, 27, 75, 0.85); /* Dark overlay for readability */
-            }
-        }
-
-        .container {
+        /* Top Navigation Header */
+        .navbar {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1.5rem 1rem;
-            opacity: 0;
-            animation: fadeInContainer 1s ease-out forwards;
-        }
-
-        @keyframes fadeInContainer {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .header h1 {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            padding: 1.5rem 2rem;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
             gap: 0.5rem;
         }
 
-        .header h1::before {
-            content: '🤖';
-            font-size: clamp(1.5rem, 4vw, 2rem);
-            animation: pulseEmoji 2s infinite ease-in-out;
+        .brand::before {
+            content: '⎎';
+            font-family: var(--font-sans);
+            font-size: 1.6rem;
+            font-weight: 300;
+            color: var(--color-text-primary);
+            display: inline-block;
+            transform: rotate(-10deg);
         }
 
-        @keyframes pulseEmoji {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
-        .header p {
-            color: var(--text-secondary);
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--color-text-primary);
+        }
+
+        .nav-links a.dropdown::after {
+            content: ' ▾';
+            font-size: 0.8rem;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .btn-link {
+            text-decoration: none;
+            color: var(--color-text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .btn-pill-dark {
+            background-color: var(--color-text-primary);
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 2rem;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-pill-dark:hover {
+            background-color: #333333;
+            transform: scale(1.03);
+        }
+
+        /* Hero / Header Section */
+        .hero {
+            max-width: 1000px;
+            margin: 4rem auto 2rem;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--color-text-primary);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
             font-weight: 400;
         }
 
-        .form-container {
-            background: var(--bg-card);
-            border-radius: 1rem;
-            box-shadow: var(--shadow-lg);
-            padding: 2rem;
+        /* Abstract Flowing CSS Wave */
+        .wave-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            margin: 2rem 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .wave-bg {
+            position: absolute;
+            width: 120%;
+            height: 160%;
+            background: 
+                radial-gradient(circle at 20% 50%, var(--accent-gold-light) 0%, transparent 60%),
+                radial-gradient(circle at 80% 50%, var(--accent-blue-light) 0%, transparent 60%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9) 10%, transparent 70%);
+            filter: blur(40px);
+            opacity: 0.85;
+            animation: waveFlow 18s infinite alternate ease-in-out;
+        }
+
+        @keyframes waveFlow {
+            0% { transform: translate(-3%, -2%) rotate(0deg) scale(1); }
+            100% { transform: translate(3%, 2%) rotate(6deg) scale(1.08); }
+        }
+
+        .wave-ribbon {
+            position: absolute;
+            width: 140%;
+            height: 60px;
+            background: linear-gradient(90deg, 
+                transparent 10%, 
+                rgba(246, 211, 101, 0.5) 30%, 
+                rgba(79, 172, 254, 0.4) 50%, 
+                rgba(246, 211, 101, 0.4) 70%, 
+                transparent 90%);
+            filter: blur(25px);
+            transform: skewY(-4deg);
+        }
+
+        /* Trusted Model Brand Logos Row */
+        .logo-cloud {
+            margin-top: 2rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(17, 17, 17, 0.04);
+            border-bottom: 1px solid rgba(17, 17, 17, 0.04);
+        }
+
+        .logo-cloud-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-grid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 3rem;
+            opacity: 0.65;
+        }
+
+        .logo-item {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .logo-item span {
+            font-family: var(--font-sans);
+            font-size: 1.2rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Interactive Dashboard Grid */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dashboard Panel Style */
+        .dashboard-card {
+            background-color: var(--bg-card);
             border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            box-shadow: var(--shadow-md);
+            padding: 2.5rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .dashboard-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .dashboard-header {
             margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        .dashboard-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-subtitle {
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Dashboard Tabbed Navigation - Resolves Accordion Heights */
+        .tab-menu {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-menu::-webkit-scrollbar {
+            height: 3px;
+        }
+        
+        .tab-menu::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 10px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            border-radius: 2rem;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            color: var(--color-text-primary);
+            background-color: rgba(17, 17, 17, 0.03);
+        }
+
+        .tab-btn.active {
+            color: #ffffff;
+            background-color: var(--color-text-primary);
+        }
+
+        /* Form Content Sections */
+        .tab-content {
+            display: none;
+            animation: tabFadeIn 0.4s ease forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .form-grid {
             display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            align-items: start;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.75rem;
         }
 
-        .form-section {
-            border-radius: 0.75rem;
-            border: 2px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            padding: 0.75rem 1.75rem 1.75rem;
-            cursor: pointer;
+        .form-group-full {
+            grid-column: 1 / -1;
         }
 
-        .form-section:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* Section-specific backgrounds and sizing */
-        .form-section.personal {
-            background: var(--personal-bg);
-            grid-row: span 2;
-        }
-
-        .form-section.phone {
-            background: var(--phone-bg);
-            grid-row: span 1;
-        }
-
-        .form-section.internet {
-            background: var(--internet-bg);
-            grid-row: span 3;
-        }
-
-        .form-section.billing {
-            background: var(--billing-bg);
-            grid-row: span 2;
-        }
-
-        /* Valid and invalid section styles */
-        .form-section.valid-section {
-            border-color: var(--success-color);
-        }
-
-        .form-section.invalid-section {
-            border-color: var(--error-color);
-        }
-
-        .section-title {
-            font-size: clamp(1.2rem, 3vw, 1.35rem);
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--accent-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '▼';
-            font-size: 1rem;
-            position: absolute;
-            right: 0;
-            transition: transform 0.3s ease;
-        }
-
-        .form-section.open .section-title::after {
-            transform: rotate(180deg);
-        }
-
-        .section-title::before {
-            content: '';
-            width: 4px;
-            height: 1.25rem;
-            background: var(--accent-color);
-            border-radius: 2px;
-        }
-
-        .section-title.personal::before {
-            content: '👤';
-            width: auto;
-            height: auto;
-            background: none;
-            font-size: 1.5rem;
-        }
-
-        .section-title.phone::before {
-            content: '📞';
-            width: auto;
-            height: auto;
-            background: none;
-            font-size: 1.5rem;
-        }
-
-        .section-title.internet::before {
-            content: '🌐';
-            width: auto;
-            height: auto;
-            background: none;
-            font-size: 1.5rem;
-        }
-
-        .section-title.billing::before {
-            content: '💳';
-            width: auto;
-            height: auto;
-            background: none;
-            font-size: 1.5rem;
-        }
-
-        .form-section .form-group {
+        .input-label {
             display: block;
-            max-height: 0;
-            opacity: 0;
-            margin-bottom: 0;
-            position: relative;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, opacity 0.5s ease-out, margin-bottom 0.5s ease-out;
-        }
-
-        .form-section.open .form-group {
-            max-height: 1000px; /* Large enough to accommodate content */
-            opacity: 1;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-section .form-group:last-child {
-            margin-bottom: 0;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            color: var(--text-primary);
-            font-size: clamp(1rem, 2.2vw, 1.1rem);
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
+            color: var(--color-text-primary);
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        /* Label animation for focus state */
-        input[type="text"]:focus + label,
-        input[type="number"]:focus + label,
-        select:focus + label,
-        input[type="text"]:not(:placeholder-shown) + label,
-        input[type="number"]:not(:placeholder-shown) + label,
-        select:not(:placeholder-shown) + label {
-            transform: translateY(-1.8rem) scale(0.9);
-            color: var(--accent-color);
-            font-weight: 700;
-            opacity: 1;
-            animation: labelPop 0.3s ease-out;
+        .input-label span {
+            color: var(--color-error);
         }
 
-        @keyframes labelPop {
-            from {
-                transform: translateY(0) scale(1);
-                opacity: 0.7;
-            }
-            to {
-                transform: translateY(-1.8rem) scale(0.9);
-                opacity: 1;
-            }
-        }
-
-        /* Add icons to inputs and selects */
-        .form-group {
-            position: relative;
-            padding-left: 2rem;
-            margin-bottom: 1.75rem;
-        }
-
-        .form-group::before {
-            content: '';
-            font-size: 1.1rem;
-            position: absolute;
-            left: 0.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1;
-            transition: transform 0.3s ease;
-        }
-
-        .form-group:hover::before {
-            transform: translateY(-50%) scale(1.2);
-        }
-
-        .form-group.gender::before { content: '🚻'; }
-        .form-group.senior-citizen::before { content: '👴'; }
-        .form-group.partner::before { content: '💑'; }
-        .form-group.dependents::before { content: '👪'; }
-        .form-group.tenure::before { content: '⏳'; }
-        .form-group.phone-service::before { content: '📱'; }
-        .form-group.multiple-lines::before { content: '📞'; }
-        .form-group.internet-service::before { content: '🖧'; }
-        .form-group.online-security::before { content: '🔒'; }
-        .form-group.online-backup::before { content: '💾'; }
-        .form-group.device-protection::before { content: '🛡️'; }
-        .form-group.tech-support::before { content: '🛠️'; }
-        .form-group.streaming-tv::before { content: '📺'; }
-        .form-group.streaming-movies::before { content: '🎥'; }
-        .form-group.contract::before { content: '📝'; }
-        .form-group.paperless-billing::before { content: '📧'; }
-        .form-group.payment-method::before { content: '💵'; }
-        .form-group.monthly-charges::before { content: '💸'; }
-        .form-group.total-charges::before { content: '💰'; }
-
-        .required {
-            color: var(--error-color);
-        }
-
+        /* High-End Custom Input Fields */
         input[type="text"],
         input[type="number"],
         select {
             width: 100%;
-            max-width: 300px;
-            padding: 0.8rem 1rem 0.8rem 2.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            background: var(--input-bg);
-            background-clip: padding-box;
-            box-shadow: 0 0 0 2px transparent, inset 0 0 0 2px var(--border-color);
-            color: var(--text-primary);
-            font-size: clamp(0.95rem, 2.5vw, 1.05rem);
-            transition: all 0.3s ease, transform 0.2s ease;
-            position: relative;
+            padding: 0.85rem 1.2rem;
+            border: 1px solid var(--border-color);
+            background-color: #ffffff;
+            border-radius: 0.6rem;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+            transition: var(--transition);
+            outline: none;
             appearance: none;
         }
 
         input[type="text"]:focus,
         input[type="number"]:focus,
         select:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px var(--input-focus-glow), inset 0 0 0 2px var(--accent-color);
-            background: var(--input-bg);
-            transform: scale(1.02);
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.05);
         }
 
-        input[type="text"]:invalid,
-        input[type="number"]:invalid,
-        select:invalid {
-            box-shadow: 0 0 0 2px var(--error-color);
-        }
-
-        input[type="text"]:valid,
-        input[type="number"]:valid,
-        select:valid {
-            box-shadow: 0 0 0 2px var(--success-color);
-        }
-
-        /* Custom select dropdown arrow */
+        /* Dropdown Chevron arrow for Select */
         select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235a67d8' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 12px;
-            transition: background-position 0.3s ease;
+            background-position: right 1.2rem center;
+            background-size: 1rem;
+            padding-right: 2.5rem;
         }
 
-        select:focus {
-            background-position: right 0.8rem center;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            select {
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23a5b4fc' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-            }
-        }
-
-        .radio-group,
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
+        /* Modern Premium Radio Card Buttons */
+        .radio-card-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
             gap: 0.75rem;
-            margin-top: 0.5rem;
         }
 
-        .radio-item,
-        .checkbox-item {
+        .radio-card {
             position: relative;
-            display: inline-block;
-            width: 100%;
-            max-width: 200px;
-            padding: 0.8rem 1rem 0.8rem 2.5rem;
-            border-radius: 0.5rem;
-            background: var(--input-bg);
-            box-shadow: 0 0 0 2px var(--border-color);
-            color: var(--text-primary);
-            font-size: clamp(0.95rem, 2.5vw, 1.05rem);
-            transition: all 0.3s ease, transform 0.2s ease;
-            cursor: pointer;
-        }
-
-        .radio-item:hover,
-        .checkbox-item:hover {
-            box-shadow: 0 0 0 2px var(--accent-color);
-            background: var(--bg-secondary);
-            transform: translateY(-1px) scale(1.02);
-        }
-
-        .radio-item.selected,
-        .checkbox-item.selected {
-            box-shadow: 0 0 0 2px var(--accent-color);
-            background: linear-gradient(135deg, var(--accent-color), var(--success-color));
-            color: white;
-            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
-            transform: scale(1.02);
-            animation: selectPop 0.2s ease-out;
-        }
-
-        @keyframes selectPop {
-            from {
-                transform: scale(1);
-            }
-            to {
-                transform: scale(1.02);
-            }
-        }
-
-        .radio-item input[type="radio"],
-        .checkbox-item input[type="checkbox"] {
-            appearance: none;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            margin: 0;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 2;
-        }
-
-        .radio-item label,
-        .checkbox-item label {
-            position: absolute;
-            top: 50%;
-            left: 2.5rem;
-            transform: translateY(-50%);
-            font-size: clamp(0.95rem, 2.5vw, 1.05rem);
-            color: var(--text-secondary);
-            pointer-events: none;
-            transition: all 0.3s ease;
-            margin-bottom: 0;
-        }
-
-        .radio-item input[type="radio"]:checked + label,
-        .checkbox-item input[type="checkbox"]:checked + label {
-            color: white;
-            transform: translateY(-50%) scale(0.95);
-        }
-
-        .radio-item input[type="radio"]:focus + label,
-        .checkbox-item input[type="checkbox"]:focus + label {
-            color: var(--accent-color);
-        }
-
-        .submit-section {
-            grid-column: 1 / -1;
+            border: 1px solid var(--border-color);
+            border-radius: 0.6rem;
+            padding: 0.85rem 1rem;
             text-align: center;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
         }
 
-        .submit-btn {
-            background: var(--gradient-accent);
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            border-radius: 0.75rem;
-            font-size: clamp(1rem, 2.5vw, 1.1rem);
+        .radio-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .radio-card-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            transition: var(--transition);
+        }
+
+        .radio-card:hover {
+            border-color: var(--color-text-primary);
+            background-color: rgba(17, 17, 17, 0.01);
+        }
+
+        /* Selected State for Custom Radio Cards */
+        .radio-card.selected {
+            border-color: var(--color-text-primary);
+            background-color: var(--color-text-primary);
+        }
+
+        .radio-card.selected .radio-card-label {
+            color: #ffffff;
+        }
+
+        /* Navigation Buttons between Tabs & Submit */
+        .form-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+
+        .btn-nav-outline {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--color-text-primary);
+            padding: 0.8rem 1.6rem;
+            border-radius: 2rem;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease, transform 0.2s ease;
-            box-shadow: var(--shadow);
-            min-width: 180px;
-            position: relative;
-            display: flex;
+            transition: var(--transition);
+        }
+
+        .btn-nav-outline:hover {
+            border-color: var(--color-text-primary);
+            background-color: rgba(17, 17, 17, 0.02);
+        }
+
+        .btn-nav-outline:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-submit {
+            background-color: var(--color-text-primary);
+            color: #ffffff;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 2rem;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
 
-        .submit-btn::before {
-            content: '🔮';
-            font-size: 1rem;
-            transition: transform 0.3s ease;
+        .btn-submit:hover {
+            background-color: #333333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(17, 17, 17, 0.15);
         }
 
-        .submit-btn:hover:not(:disabled) {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: var(--shadow-lg);
-            background: linear-gradient(135deg, var(--accent-hover), var(--success-color));
-        }
-
-        .submit-btn:hover:not(:disabled)::before {
-            transform: scale(1.2);
-        }
-
-        .submit-btn:active {
-            transform: scale(0.95);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.7;
+        .btn-submit:disabled {
+            background-color: var(--color-text-muted);
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
-        .loading {
-            display: none;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .loading.active {
-            display: flex;
-            opacity: 1;
-        }
-
+        /* Dynamic Spinner on button */
         .spinner {
-            width: 1.25rem;
-            height: 1.25rem;
+            width: 1.15rem;
+            height: 1.15rem;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
+            border-top: 2px solid #ffffff;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
+            display: none;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .submit-text {
-            display: block;
-            transition: opacity 0.3s ease;
-        }
-
-        .submit-text.hidden {
-            display: none;
-            opacity: 0;
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: clamp(0.8rem, 2vw, 0.875rem);
-            margin-top: 0.25rem;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .form-group.error .error-message {
-            display: block;
-            opacity: 1;
-        }
-
-        .results-container {
-            background: var(--bg-card);
-            border-radius: 1rem;
-            box-shadow: var(--shadow-lg);
-            padding: 1.5rem;
+        /* Results & Analytics Panel (Right Column) */
+        .results-panel {
+            background-color: var(--bg-card);
             border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            box-shadow: var(--shadow-md);
+            padding: 2.5rem;
+            transition: var(--transition);
+            min-height: 520px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .results-panel:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Empty State Placeholder */
+        .results-placeholder {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .placeholder-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            animation: pulsePlaceholder 3s infinite ease-in-out;
+        }
+
+        @keyframes pulsePlaceholder {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.08); opacity: 1; }
+        }
+
+        .results-placeholder h3 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .results-placeholder p {
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+            max-width: 320px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Active Results Panel Layout */
+        .results-content {
             display: none;
             opacity: 0;
-            transform: translateY(20px) scale(0.98);
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            animation: tabFadeIn 0.6s ease forwards;
         }
 
-        .results-container.show {
+        .results-content.active {
             display: block;
             opacity: 1;
-            transform: translateY(0) scale(1);
         }
 
-        .results-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .results-title {
-            font-size: clamp(1.5rem, 4vw, 1.8rem);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--accent-color);
+        /* Global Churn Risk Ring Indicator */
+        .risk-overview {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .results-title::before {
-            content: '🎯';
-            font-size: 1.5rem;
-            animation: pulseEmoji 2s infinite ease-in-out;
-        }
-
-        .results-subtitle {
-            color: var(--text-secondary);
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-        }
-
-        .results-grid {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        }
-
-        .model-result {
-            background: var(--bg-secondary);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+        .risk-ring-container {
             position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(10px);
+            width: 110px;
+            height: 110px;
         }
 
-        .results-container.show .model-result {
+        .risk-ring-svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .risk-ring-circle-bg {
+            fill: none;
+            stroke: var(--border-color);
+            stroke-width: 8;
+        }
+
+        .risk-ring-circle-fill {
+            fill: none;
+            stroke: var(--color-text-primary);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 283; /* 2 * PI * r (r=45) */
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .risk-value-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-sans);
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .risk-meta h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .risk-status {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .risk-desc {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Individual Model Result Cards */
+        .model-results-grid {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .model-result-item {
+            background-color: var(--bg-page);
+            border: 1px solid var(--border-color);
+            border-radius: 0.8rem;
+            padding: 1.2rem 1.5rem;
+            transition: var(--transition);
+        }
+
+        .model-result-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--color-text-primary);
+        }
+
+        .model-result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .model-result-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .model-result-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.6rem;
+            border-radius: 1rem;
+        }
+
+        .badge-churn {
+            background-color: rgba(225, 29, 72, 0.1);
+            color: var(--color-error);
+        }
+
+        .badge-stay {
+            background-color: rgba(13, 148, 136, 0.1);
+            color: var(--color-success);
+        }
+
+        .progress-container {
+            height: 6px;
+            background-color: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0.5rem 0 0.25rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--color-text-primary);
+            border-radius: 3px;
+            width: 0;
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .model-result-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Alert notifications */
+        .alert-toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--color-text-primary);
+            color: #ffffff;
+            padding: 1rem 1.75rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+        }
+
+        .alert-toast.active {
+            display: flex;
             opacity: 1;
             transform: translateY(0);
         }
 
-        .model-result:nth-child(1) { transition-delay: 0.1s; }
-        .model-result:nth-child(2) { transition-delay: 0.2s; }
-        .model-result:nth-child(3) { transition-delay: 0.3s; }
-        .model-result:nth-child(4) { transition-delay: 0.4s; }
-        .model-result:nth-child(5) { transition-delay: 0.5s; }
-
-        .model-result:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .model-result::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-accent);
-            transition: height 0.3s ease;
-        }
-
-        .model-result:hover::before {
-            height: 6px;
-        }
-
-        .model-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-
-        .model-name {
-            font-weight: 700;
-            font-size: clamp(1rem, 2.5vw, 1.1rem);
-            color: var(--text-primary);
-        }
-
-        .model-icon {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-            font-size: 0.8rem;
-            box-shadow: 0 2px 4px rgb(0 0 0 / 0.15);
-            transition: transform 0.3s ease;
-        }
-
-        .model-result:hover .model-icon {
-            transform: rotate(360deg);
-        }
-
-        .prediction-section {
-            margin: 1rem 0;
-        }
-
-        .prediction-label {
-            font-size: clamp(0.8rem, 2vw, 0.9rem);
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .prediction {
-            font-size: clamp(1.3rem, 3vw, 1.5rem);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .prediction.churn {
-            color: var(--error-color);
-        }
-
-        .prediction.no-churn {
-            color: var(--success-color);
-        }
-
-        .prediction-icon {
+        .alert-toast-icon {
             font-size: 1.2rem;
-            transition: transform 0.3s ease;
         }
 
-        .prediction:hover .prediction-icon {
-            transform: scale(1.2);
-        }
-
-        .confidence-bar {
-            background: var(--border-color);
-            border-radius: 1rem;
-            height: 8px;
-            margin: 0.5rem 0;
-            overflow: hidden;
-        }
-
-        .confidence-fill {
-            height: 100%;
-            border-radius: 1rem;
-            background: var(--gradient-accent);
-            transition: width 1s ease-in-out;
-        }
-
-        .confidence-text {
-            font-size: clamp(0.8rem, 2vw, 0.9rem);
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-
-        .probability-section {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .probability-label {
-            font-size: clamp(0.75rem, 2vw, 0.8rem);
-            color: var(--text-secondary);
-            margin-bottom: 0.25rem;
-        }
-
-        .probability-value {
-            font-size: clamp(1rem, 2.5vw, 1.1rem);
-            font-weight: 600;
-            color: var(--accent-color);
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin: 1rem 0;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .alert.show {
-            display: block;
-            opacity: 1;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--error-color);
-            color: var(--error-color);
-        }
-
-        .alert-success {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--success-color);
-            color: var(--success-color);
-        }
-
-        /* Loading overlay */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .loading-overlay.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .loading-spinner {
-            width: 3rem;
-            height: 3rem;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid var(--accent-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite, scaleIn 0.5s ease-out;
-        }
-
-        .loading-text {
-            color: white;
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            font-weight: 600;
-            animation: fadeInText 0.5s ease-out;
-        }
-
-        @keyframes scaleIn {
-            from { transform: scale(0); }
-            to { transform: scale(1); }
-        }
-
-        @keyframes fadeInText {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Enhanced responsive design */
-        @media (max-width: 1024px) {
-            .container {
-                padding: 1rem 0.75rem;
-            }
-
-            .form-container {
-                padding: 1.5rem;
-            }
-
-            .form-grid {
-                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-                gap: 1rem;
-            }
-
-            .form-section {
-                padding: 0.5rem 1.25rem 1.25rem;
-            }
-
-            input[type="text"],
-            input[type="number"],
-            select {
-                max-width: 280px;
-                padding: 0.75rem 1rem 0.75rem 2.2rem;
-                font-size: clamp(0.9rem, 2vw, 0.95rem);
-            }
-
-            .radio-item,
-            .checkbox-item {
-                max-width: 180px;
-                padding: 0.75rem 1rem 0.75rem 2.2rem;
-                font-size: clamp(0.9rem, 2vw, 0.95rem);
-            }
-
-            .form-group {
-                padding-left: 1.8rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .form-group::before {
-                left: 0.4rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-section {
-                grid-row: auto !important;
-                padding: 0.5rem 1.5rem 1.5rem;
-            }
-
-            .radio-group,
-            .checkbox-group {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-
-            .radio-item,
-            .checkbox-item {
-                max-width: none;
-                padding: 0.75rem 1rem 0.75rem 2rem;
-            }
-
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .loading-spinner {
-                width: 2.5rem;
-                height: 2.5rem;
-            }
-
-            .loading-text {
-                font-size: clamp(0.9rem, 2vw, 1rem);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0.75rem;
-            }
-
-            .header h1 {
-                font-size: clamp(1.5rem, 5vw, 1.8rem);
-            }
-
-            .form-container {
-                padding: 1.25rem;
-            }
-
-            .form-section {
-                padding: 0.5rem 1.25rem 1.25rem;
-            }
-
-            .form-group {
-                padding-left: 1.75rem;
-                margin-bottom: 1.25rem;
-            }
-
-            .form-group::before {
-                left: 0.3rem;
-                font-size: 0.9rem;
-            }
-
-            input[type="text"],
-            input[type="number"],
-            select {
-                max-width: 100%;
-                padding: 0.75rem 1rem 0.75rem 2rem;
-                font-size: clamp(0.85rem, 2.5vw, 0.9rem);
-            }
-
-            .radio-item,
-            .checkbox-item {
-                max-width: 100%;
-                padding: 0.75rem 1rem 0.75rem 2rem;
-                font-size: clamp(0.85rem, 2.5vw, 0.9rem);
-                margin-bottom: 0.5rem;
-            }
-
-            .radio-item label,
-            .checkbox-item label {
-                left: 2rem;
-                font-size: clamp(0.85rem, 2.5vw, 0.9rem);
-            }
-
-            .radio-group,
-            .checkbox-group {
-                gap: 0.5rem;
-            }
-
-            .section-title {
-                font-size: clamp(1.1rem, 3vw, 1.2rem);
-            }
-
-            .label {
-                font-size: clamp(0.9rem, 2.2vw, 1rem);
-                margin-bottom: 0.6rem;
-            }
-
-            .submit-btn {
-                width: 100%;
-                padding: 0.75rem;
-                min-width: auto;
-            }
-
-            .loading-spinner {
-                width: 2rem;
-                height: 2rem;
-            }
-
-            .loading-text {
-                font-size: clamp(0.8rem, 2vw, 0.9rem);
-            }
+        /* Footer Copyright Muted */
+        .footer {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            border-top: 1px solid rgba(17, 17, 17, 0.04);
+            max-width: 1400px;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Predicting Churn...</div>
-    </div>
 
-    <div class="container">
-        <div class="header">
-            <h1>Customer Churn Prediction</h1>
-            <p>Enter customer details to predict churn probability using multiple ML models</p>
+    <!-- Header Navbar -->
+    <header class="navbar">
+        <a href="#" class="brand">churn.ai</a>
+        <nav class="nav-links">
+            <a href="#" class="dropdown">Platform</a>
+            <a href="#" class="dropdown">Solutions</a>
+            <a href="#">Resources</a>
+            <a href="#">Pricing</a>
+        </nav>
+        <div class="nav-actions">
+            <a href="#" class="btn-link">Sign In</a>
+            <a href="#dashboard" class="btn-pill-dark">Start Predicting</a>
+        </div>
+    </header>
+
+    <!-- Hero Banner (Inspired by Reference) -->
+    <section class="hero">
+        <h1>Predict and prevent customer churn with AI.</h1>
+        <p>A dedicated predictor for every customer. Harness multiple state-of-the-art machine learning models running tailored evaluations 24/7.</p>
+        <a href="#dashboard" class="btn-pill-dark">
+            See AI Demo <span>→</span>
+        </a>
+
+        <!-- Premium Gradient Fluid Wave -->
+        <div class="wave-container">
+            <div class="wave-bg"></div>
+            <div class="wave-ribbon"></div>
         </div>
 
-        <!-- Alert Messages -->
-        <div id="alertContainer"></div>
+        <!-- Trusted Model Logo Row Cloud -->
+        <div class="logo-cloud">
+            <div class="logo-cloud-title">POWERED BY TRUSTED MACHINE LEARNING ALGORITHMS</div>
+            <div class="logo-grid">
+                <div class="logo-item"><span>❖</span> Logistic Regression</div>
+                <div class="logo-item"><span>✦</span> Decision Tree</div>
+                <div class="logo-item"><span>✹</span> Random Forest</div>
+                <div class="logo-item"><span>💠</span> Support Vector Machine</div>
+            </div>
+        </div>
+    </section>
 
-        <form id="predictionForm" class="form-container" novalidate>
-            <div class="form-grid">
-                <!-- Personal Information -->
-                <div class="form-section personal">
-                    <h3 class="section-title personal">Personal Information</h3>
-                    
-                    <div class="form-group gender">
-                        <label for="gender">Gender <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="gender_male" name="gender" value="Male" required>
-                                <label for="gender_male">Male</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="gender_female" name="gender" value="Female" required>
-                                <label for="gender_female">Female</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="gender_others" name="gender" value="Others" required>
-                                <label for="gender_others">Others</label>
+    <!-- Main Dashboard Application -->
+    <main class="dashboard-container" id="dashboard">
+        
+        <!-- Left Panel: Beautifully-Aligned Form Inputs -->
+        <div class="dashboard-card">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Customer Profiler</h2>
+                <p class="dashboard-subtitle">Provide information about the customer to trigger predictions.</p>
+            </div>
+
+            <!-- Horizontal Tab Menu — Keeps form balanced and aligned perfectly -->
+            <div class="tab-menu" id="tabMenu">
+                <button type="button" class="tab-btn active" data-tab="personal">👤 Personal Details</button>
+                <button type="button" class="tab-btn" data-tab="phone">📞 Phone Services</button>
+                <button type="button" class="tab-btn" data-tab="internet">🌐 Internet Services</button>
+                <button type="button" class="tab-btn" data-tab="billing">💳 Billing & Payment</button>
+            </div>
+
+            <!-- Form Wrapper -->
+            <form id="predictionForm" novalidate>
+                
+                <!-- Tab Content 1: Personal Details -->
+                <div class="tab-content active" id="tab-personal">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="input-label">Gender <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="gender" value="Male" required>
+                                    <span class="radio-card-label">Male</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="gender" value="Female" required>
+                                    <span class="radio-card-label">Female</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="gender" value="Others" required>
+                                    <span class="radio-card-label">Others</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please select a gender</div>
-                    </div>
 
-                    <div class="form-group senior-citizen">
-                        <label for="SeniorCitizen">Senior Citizen <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="senior_yes" name="SeniorCitizen" value="1" required>
-                                <label for="senior_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="senior_no" name="SeniorCitizen" value="0" required>
-                                <label for="senior_no">No</label>
+                        <div class="form-group">
+                            <label class="input-label">Senior Citizen <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="SeniorCitizen" value="1" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="SeniorCitizen" value="0" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify if senior citizen</div>
-                    </div>
 
-                    <div class="form-group partner">
-                        <label for="Partner">Partner <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="partner_yes" name="Partner" value="Yes" required>
-                                <label for="partner_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="partner_no" name="Partner" value="No" required>
-                                <label for="partner_no">No</label>
+                        <div class="form-group">
+                            <label class="input-label">Has Partner <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="Partner" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="Partner" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify if has partner</div>
-                    </div>
 
-                    <div class="form-group dependents">
-                        <label for="Dependents">Dependents <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="dependents_yes" name="Dependents" value="Yes" required>
-                                <label for="dependents_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="dependents_no" name="Dependents" value="No" required>
-                                <label for="dependents_no">No</label>
+                        <div class="form-group">
+                            <label class="input-label">Has Dependents <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="Dependents" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="Dependents" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify if has dependents</div>
-                    </div>
 
-                    <div class="form-group tenure">
-                        <label for="tenure">Tenure (months) <span class="required">*</span></label>
-                        <input type="number" id="tenure" name="tenure" min="0" max="100" required placeholder="e.g., 12">
-                        <div class="error-message">Please enter tenure in months (0-100)</div>
+                        <div class="form-group form-group-full">
+                            <label for="tenure" class="input-label">Account Tenure (months) <span>*</span></label>
+                            <input type="number" id="tenure" name="tenure" min="0" max="100" required placeholder="e.g. 12 months">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Phone Services -->
-                <div class="form-section phone">
-                    <h3 class="section-title phone">Phone Services</h3>
-                    
-                    <div class="form-group phone-service">
-                        <label for="PhoneService">Phone Service <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="phone_yes" name="PhoneService" value="Yes" required>
-                                <label for="phone_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="phone_no" name="PhoneService" value="No" required>
-                                <label for="phone_no">No</label>
+                <!-- Tab Content 2: Phone Services -->
+                <div class="tab-content" id="tab-phone">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="input-label">Phone Service <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="PhoneService" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="PhoneService" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify if has phone service</div>
-                    </div>
 
-                    <div class="form-group multiple-lines">
-                        <label for="MultipleLines">Multiple Lines <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="multiple_yes" name="MultipleLines" value="Yes" required>
-                                <label for="multiple_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="multiple_no" name="MultipleLines" value="No" required>
-                                <label for="multiple_no">No</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="multiple_no_phone" name="MultipleLines" value="No phone service" required>
-                                <label for="multiple_no_phone">No phone service</label>
+                        <div class="form-group">
+                            <label class="input-label">Multiple Lines <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="MultipleLines" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="MultipleLines" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="MultipleLines" value="No phone service" required>
+                                    <span class="radio-card-label">None</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify multiple lines status</div>
                     </div>
                 </div>
 
-                <!-- Internet Services -->
-                <div class="form-section internet">
-                    <h3 class="section-title internet">Internet Services</h3>
-                    
-                    <div class="form-group internet-service">
-                        <label for="InternetService">Internet Service <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="internet_dsl" name="InternetService" value="DSL" required>
-                                <label for="internet_dsl">DSL</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="internet_fiber" name="InternetService" value="Fiber optic" required>
-                                <label for="internet_fiber">Fiber optic</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="internet_no" name="InternetService" value="No" required>
-                                <label for="internet_no">No</label>
+                <!-- Tab Content 3: Internet Services -->
+                <div class="tab-content" id="tab-internet">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="input-label">Internet Connection <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="InternetService" value="DSL" required>
+                                    <span class="radio-card-label">DSL</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="InternetService" value="Fiber optic" required>
+                                    <span class="radio-card-label">Fiber Optic</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="InternetService" value="No" required>
+                                    <span class="radio-card-label">None</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please select internet service type</div>
-                    </div>
 
-                    <div class="form-group online-security">
-                        <label for="OnlineSecurity">Online Security <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="security_yes" name="OnlineSecurity" value="Yes" required>
-                                <label for="security_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="security_no" name="OnlineSecurity" value="No" required>
-                                <label for="security_no">No</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="security_no_internet" name="OnlineSecurity" value="No internet service" required>
-                                <label for="security_no_internet">No internet service</label>
+                        <div class="form-group">
+                            <label class="input-label">Online Security <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="OnlineSecurity" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="OnlineSecurity" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="OnlineSecurity" value="No internet service" required>
+                                    <span class="radio-card-label">None</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify online security status</div>
-                    </div>
 
-                    <div class="form-group online-backup">
-                        <label for="OnlineBackup">Online Backup <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="backup_yes" name="OnlineBackup" value="Yes" required>
-                                <label for="backup_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="backup_no" name="OnlineBackup" value="No" required>
-                                <label for="backup_no">No</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="backup_no_internet" name="OnlineBackup" value="No internet service" required>
-                                <label for="backup_no_internet">No internet service</label>
+                        <div class="form-group">
+                            <label class="input-label">Online Backup <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="OnlineBackup" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="OnlineBackup" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="OnlineBackup" value="No internet service" required>
+                                    <span class="radio-card-label">None</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify online backup status</div>
-                    </div>
 
-                    <div class="form-group device-protection">
-                        <label for="DeviceProtection">Device Protection <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="device_yes" name="DeviceProtection" value="Yes" required>
-                                <label for="device_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="device_no" name="DeviceProtection" value="No" required>
-                                <label for="device_no">No</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="device_no_internet" name="DeviceProtection" value="No internet service" required>
-                                <label for="device_no_internet">No internet service</label>
+                        <div class="form-group">
+                            <label class="input-label">Device Protection <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="DeviceProtection" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="DeviceProtection" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="DeviceProtection" value="No internet service" required>
+                                    <span class="radio-card-label">None</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify device protection status</div>
-                    </div>
 
-                    <div class="form-group tech-support">
-                        <label for="TechSupport">Tech Support <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="tech_yes" name="TechSupport" value="Yes" required>
-                                <label for="tech_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="tech_no" name="TechSupport" value="No" required>
-                                <label for="tech_no">No</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="tech_no_internet" name="TechSupport" value="No internet service" required>
-                                <label for="tech_no_internet">No internet service</label>
+                        <div class="form-group">
+                            <label class="input-label">Premium Tech Support <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="TechSupport" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="TechSupport" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="TechSupport" value="No internet service" required>
+                                    <span class="radio-card-label">None</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify tech support status</div>
-                    </div>
 
-                    <div class="form-group streaming-tv">
-                        <label for="StreamingTV">Streaming TV <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="tv_yes" name="StreamingTV" value="Yes" required>
-                                <label for="tv_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="tv_no" name="StreamingTV" value="No" required>
-                                <label for="tv_no">No</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="tv_no_internet" name="StreamingTV" value="No internet service" required>
-                                <label for="tv_no_internet">No internet service</label>
+                        <div class="form-group">
+                            <label class="input-label">Streaming TV <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="StreamingTV" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="StreamingTV" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="StreamingTV" value="No internet service" required>
+                                    <span class="radio-card-label">None</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify streaming TV status</div>
-                    </div>
 
-                    <div class="form-group streaming-movies">
-                        <label for="StreamingMovies">Streaming Movies <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="movies_yes" name="StreamingMovies" value="Yes" required>
-                                <label for="movies_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="movies_no" name="StreamingMovies" value="No" required>
-                                <label for="movies_no">No</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="movies_no_internet" name="StreamingMovies" value="No internet service" required>
-                                <label for="movies_no_internet">No internet service</label>
+                        <div class="form-group">
+                            <label class="input-label">Streaming Movies <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="StreamingMovies" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="StreamingMovies" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="StreamingMovies" value="No internet service" required>
+                                    <span class="radio-card-label">None</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify streaming movies status</div>
                     </div>
                 </div>
 
-                <!-- Billing Information -->
-                <div class="form-section billing">
-                    <h3 class="section-title billing">Billing Information</h3>
-                    
-                    <div class="form-group contract">
-                        <label for="Contract">Contract <span class="required">*</span></label>
-                        <select id="Contract" name="Contract" required>
-                            <option value="">Select contract type</option>
-                            <option value="Month-to-month">Month-to-month</option>
-                            <option value="One year">One year</option>
-                            <option value="Two year">Two year</option>
-                        </select>
-                        <div class="error-message">Please select a contract type</div>
-                    </div>
+                <!-- Tab Content 4: Billing & Payments -->
+                <div class="tab-content" id="tab-billing">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="Contract" class="input-label">Contract Type <span>*</span></label>
+                            <select id="Contract" name="Contract" required>
+                                <option value="">Select Option</option>
+                                <option value="Month-to-month">Month-to-month</option>
+                                <option value="One year">One year</option>
+                                <option value="Two year">Two year</option>
+                            </select>
+                        </div>
 
-                    <div class="form-group paperless-billing">
-                        <label for="PaperlessBilling">Paperless Billing <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="paperless_yes" name="PaperlessBilling" value="Yes" required>
-                                <label for="paperless_yes">Yes</label>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" id="paperless_no" name="PaperlessBilling" value="No" required>
-                                <label for="paperless_no">No</label>
+                        <div class="form-group">
+                            <label class="input-label">Paperless Billing <span>*</span></label>
+                            <div class="radio-card-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="PaperlessBilling" value="Yes" required>
+                                    <span class="radio-card-label">Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="PaperlessBilling" value="No" required>
+                                    <span class="radio-card-label">No</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="error-message">Please specify paperless billing preference</div>
-                    </div>
 
-                    <div class="form-group payment-method">
-                        <label for="PaymentMethod">Payment Method <span class="required">*</span></label>
-                        <select id="PaymentMethod" name="PaymentMethod" required>
-                            <option value="">Select payment method</option>
-                            <option value="Electronic check">Electronic check</option>
-                            <option value="Mailed check">Mailed check</option>
-                            <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
-                            <option value="Credit card (automatic)">Credit card (automatic)</option>
-                        </select>
-                        <div class="error-message">Please select a payment method</div>
-                    </div>
+                        <div class="form-group form-group-full">
+                            <label for="PaymentMethod" class="input-label">Payment Method <span>*</span></label>
+                            <select id="PaymentMethod" name="PaymentMethod" required>
+                                <option value="">Select Option</option>
+                                <option value="Electronic check">Electronic check</option>
+                                <option value="Mailed check">Mailed check</option>
+                                <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                                <option value="Credit card (automatic)">Credit card (automatic)</option>
+                            </select>
+                        </div>
 
-                    <div class="form-group monthly-charges">
-                        <label for="MonthlyCharges">Monthly Charges ($) <span class="required">*</span></label>
-                        <input type="number" id="MonthlyCharges" name="MonthlyCharges" min="0" step="0.01" required placeholder="e.g., 65.50">
-                        <div class="error-message">Please enter monthly charges</div>
-                    </div>
+                        <div class="form-group">
+                            <label for="MonthlyCharges" class="input-label">Monthly Charges ($) <span>*</span></label>
+                            <input type="number" id="MonthlyCharges" name="MonthlyCharges" min="0" step="0.01" required placeholder="e.g. 65.50">
+                        </div>
 
-                    <div class="form-group total-charges">
-                        <label for="TotalCharges">Total Charges ($) <span class="required">*</span></label>
-                        <input type="number" id="TotalCharges" name="TotalCharges" min="0" step="0.01" required placeholder="e.g., 1500.00">
-                        <div class="error-message">Please enter total charges</div>
+                        <div class="form-group">
+                            <label for="TotalCharges" class="input-label">Total Charges ($) <span>*</span></label>
+                            <input type="number" id="TotalCharges" name="TotalCharges" min="0" step="0.01" required placeholder="e.g. 1200.00">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Submit Section -->
-                <div class="submit-section">
-                    <button type="submit" class="submit-btn" id="submitBtn">
-                        <span class="submit-text">Predict Churn</span>
-                        <div class="loading">
-                            <div class="spinner"></div>
-                            <span>Processing...</span>
-                        </div>
+                <!-- Navigation Controls -->
+                <div class="form-navigation">
+                    <button type="button" class="btn-nav-outline" id="prevTabBtn" disabled>Back</button>
+                    
+                    <button type="button" class="btn-nav-outline" id="nextTabBtn">Continue</button>
+                    
+                    <button type="submit" class="btn-submit" id="submitBtn" style="display: none;">
+                        <span class="spinner" id="btnSpinner"></span>
+                        <span class="btn-text">Predict Churn</span>
                     </button>
                 </div>
-            </div>
-        </form>
-
-        <!-- Results Section -->
-        <div class="results-container" id="resultsContainer">
-            <div class="results-header">
-                <h2 class="results-title">Prediction Results</h2>
-                <p class="results-subtitle">Multiple ML models have analyzed the customer data</p>
-            </div>
-            <div class="results-grid" id="resultsGrid"></div>
+            </form>
         </div>
+
+        <!-- Right Panel: Analytics & Real-Time Results -->
+        <div class="results-panel" id="resultsPanel">
+            
+            <!-- Default Placeholder State -->
+            <div class="results-placeholder" id="placeholderState">
+                <div class="placeholder-icon">🔮</div>
+                <h3>Analytics Awaiting Profile</h3>
+                <p>Fill out the profile fields and click <strong>Predict Churn</strong> to trigger multiple machine learning evaluations.</p>
+            </div>
+
+            <!-- Prediction Active State -->
+            <div class="results-content" id="activeState">
+                
+                <!-- Overall Average Risk Ring Indicator -->
+                <div class="risk-overview">
+                    <div class="risk-ring-container">
+                        <svg class="risk-ring-svg">
+                            <circle class="risk-ring-circle-bg" cx="55" cy="55" r="45"></circle>
+                            <circle class="risk-ring-circle-fill" id="riskRingFill" cx="55" cy="55" r="45"></circle>
+                        </svg>
+                        <div class="risk-value-text" id="overallRiskText">0%</div>
+                    </div>
+                    <div class="risk-meta">
+                        <h4>Aggregate Risk Score</h4>
+                        <div class="risk-status" id="overallRiskStatus">Calculating...</div>
+                        <p class="risk-desc" id="overallRiskDesc">Aggregated average probability of user churn across active ML algorithms.</p>
+                    </div>
+                </div>
+
+                <!-- Individual ML Models breakdown -->
+                <div class="model-results-grid" id="modelResultsGrid">
+                    <!-- Dynamic Model Cards load here -->
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer Muted Copyright -->
+    <footer class="footer">
+        <p>&copy; 2026 churn.ai — Advanced Machine Learning Customer Churn Predictor. Built professionally.</p>
+    </footer>
+
+    <!-- Alert Message Toast -->
+    <div class="alert-toast" id="alertToast">
+        <span class="alert-toast-icon">⚠️</span>
+        <span id="alertToastMessage">Alert message goes here</span>
     </div>
 
+    <!-- Interactive Scripting -->
     <script>
-        // Backend API configuration
-        // Automatically use current origin if served directly from Flask on a custom port,
-        // otherwise default to http://localhost:5000.
+        // Backend API Configuration
+        // Dynamic origin detection when running Flask; otherwise falls back to port 5000.
         const API_BASE_URL = (window.location.protocol.startsWith('http') && window.location.port !== '5500')
             ? window.location.origin
             : 'http://localhost:5000';
-        
-        // Form validation and interactivity
-        document.addEventListener('DOMContentLoaded', function() {
+
+        document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('predictionForm');
             const submitBtn = document.getElementById('submitBtn');
-            const submitText = submitBtn.querySelector('.submit-text');
-            const loading = submitBtn.querySelector('.loading');
-            const resultsContainer = document.getElementById('resultsContainer');
-            const resultsGrid = document.getElementById('resultsGrid');
-            const alertContainer = document.getElementById('alertContainer');
-            const loadingOverlay = document.getElementById('loadingOverlay');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const nextTabBtn = document.getElementById('nextTabBtn');
+            const prevTabBtn = document.getElementById('prevTabBtn');
+            
+            const placeholderState = document.getElementById('placeholderState');
+            const activeState = document.getElementById('activeState');
+            const modelResultsGrid = document.getElementById('modelResultsGrid');
+            const riskRingFill = document.getElementById('riskRingFill');
+            const overallRiskText = document.getElementById('overallRiskText');
+            const overallRiskStatus = document.getElementById('overallRiskStatus');
+            const overallRiskDesc = document.getElementById('overallRiskDesc');
+            const alertToast = document.getElementById('alertToast');
+            const alertToastMessage = document.getElementById('alertToastMessage');
 
-            // Model configurations for display
-            const modelConfigs = {
-                'Linear Regression': { icon: 'LR', color: '#3b82f6' },
-                'Logistic Regression': { icon: 'LOG', color: '#10b981' },
-                'Decision Tree': { icon: 'DT', color: '#f59e0b' },
-                'Random Forest': { icon: 'RF', color: '#8b5cf6' },
-                'Support Vector Machine': { icon: 'SVM', color: '#ef4444' }
+            // Tabs configurations
+            const tabs = ['personal', 'phone', 'internet', 'billing'];
+            let currentTabIndex = 0;
+
+            // Model Configurations
+            const modelBadgeConfigs = {
+                'Logistic Regression': { badgeColor: 'badge-stay' },
+                'Decision Tree': { badgeColor: 'badge-churn' },
+                'Random Forest': { badgeColor: 'badge-churn' },
+                'Support Vector Machine': { badgeColor: 'badge-stay' }
             };
 
-            // Accordion functionality
-            const sections = document.querySelectorAll('.form-section');
-            sections.forEach(section => {
-                const title = section.querySelector('.section-title');
-                title.addEventListener('click', () => {
-                    // Close all other sections
-                    sections.forEach(s => {
-                        if (s !== section) {
-                            s.classList.remove('open');
-                        }
-                    });
-                    // Toggle current section
-                    section.classList.toggle('open');
-                    updateSectionValidation(section);
-                });
-            });
+            // Custom radio card interactive handler
+            document.querySelectorAll('.radio-card input[type="radio"]').forEach(radio => {
+                // Initial load selected state
+                if (radio.checked) {
+                    radio.closest('.radio-card').classList.add('selected');
+                }
 
-            // Radio button styling and interaction
-            document.querySelectorAll('input[type="radio"]').forEach(radio => {
                 radio.addEventListener('change', function() {
                     const name = this.name;
-                    // Clear selection from all radio items in this group
                     document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
-                        r.closest('.radio-item').classList.remove('selected');
+                        r.closest('.radio-card').classList.remove('selected');
                     });
-                    // Add selection to current item
-                    this.closest('.radio-item').classList.add('selected');
-                    
-                    // Clear error state
-                    const formGroup = this.closest('.form-group');
-                    formGroup.classList.remove('error');
-                    updateSectionValidation(this.closest('.form-section'));
-                });
-            });
-
-            // Real-time validation
-            form.querySelectorAll('input, select').forEach(field => {
-                field.addEventListener('input', function() {
-                    validateField(this);
-                    updateSectionValidation(this.closest('.form-section'));
-                });
-
-                field.addEventListener('blur', function() {
-                    validateField(this);
-                    updateSectionValidation(this.closest('.form-section'));
-                });
-            });
-
-            function validateField(field) {
-                const formGroup = field.closest('.form-group');
-                const isValid = field.checkValidity();
-                
-                if (isValid) {
-                    formGroup.classList.remove('error');
-                } else {
-                    formGroup.classList.add('error');
-                }
-                
-                return isValid;
-            }
-
-            function updateSectionValidation(section) {
-                if (!section) return;
-                const requiredFields = section.querySelectorAll('input[required], select[required]');
-                let allValid = true;
-                requiredFields.forEach(field => {
-                    if (!field.checkValidity()) {
-                        allValid = false;
+                    if (this.checked) {
+                        this.closest('.radio-card').classList.add('selected');
                     }
                 });
-                section.classList.remove('valid-section', 'invalid-section');
-                if (allValid) {
-                    section.classList.add('valid-section');
+            });
+
+            // Interactive Tab Switcher
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    const index = tabs.indexOf(tabId);
+                    if (index !== -1) {
+                        switchTab(index);
+                    }
+                });
+            });
+
+            function switchTab(index) {
+                // Update active classes for buttons
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabButtons[index].classList.add('active');
+
+                // Update active content
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(`tab-${tabs[index]}`).classList.add('active');
+
+                currentTabIndex = index;
+
+                // Configure control buttons
+                prevTabBtn.disabled = (currentTabIndex === 0);
+
+                if (currentTabIndex === tabs.length - 1) {
+                    nextTabBtn.style.display = 'none';
+                    submitBtn.style.display = 'inline-flex';
                 } else {
-                    section.classList.add('invalid-section');
+                    nextTabBtn.style.display = 'inline-flex';
+                    submitBtn.style.display = 'none';
                 }
             }
 
-            // Update all sections on load
-            sections.forEach(updateSectionValidation);
+            // Navigation clicks
+            nextTabBtn.addEventListener('click', () => {
+                if (currentTabIndex < tabs.length - 1) {
+                    // Quick validation on current tab fields before moving forward
+                    const currentTabContent = document.getElementById(`tab-${tabs[currentTabIndex]}`);
+                    const invalidFields = currentTabContent.querySelectorAll('input:invalid, select:invalid');
+                    
+                    if (invalidFields.length > 0) {
+                        showToast("Please fill out all required fields in this section before continuing.");
+                        // Highlight first invalid
+                        invalidFields[0].focus();
+                        return;
+                    }
+                    switchTab(currentTabIndex + 1);
+                }
+            });
 
-            function showAlert(message, type = 'error') {
-                const alert = document.createElement('div');
-                alert.className = `alert alert-${type} show`;
-                alert.textContent = message;
-                
-                alertContainer.innerHTML = '';
-                alertContainer.appendChild(alert);
-                
-                // Auto-hide after 5 seconds
+            prevTabBtn.addEventListener('click', () => {
+                if (currentTabIndex > 0) {
+                    switchTab(currentTabIndex - 1);
+                }
+            });
+
+            // Toast Alert notification helper
+            function showToast(message) {
+                alertToastMessage.textContent = message;
+                alertToast.classList.add('active');
                 setTimeout(() => {
-                    alert.classList.remove('show');
-                    setTimeout(() => alert.remove(), 300);
+                    alertToast.classList.remove('active');
                 }, 5000);
             }
 
-            // Form submission handler
-            form.addEventListener('submit', async function(e) {
+            // Form Submit Prediction Trigger
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                
-                // Hide previous results and alerts
-                resultsContainer.classList.remove('show');
-                alertContainer.innerHTML = '';
-                
-                // Validate all fields
-                let isValid = true;
-                const invalidFields = [];
-                
-                form.querySelectorAll('input[required], select[required]').forEach(field => {
-                    if (!validateField(field)) {
-                        isValid = false;
-                        const label = field.closest('.form-group').querySelector('label').textContent.replace(' *', '');
-                        invalidFields.push(label);
-                    }
-                });
 
-                if (!isValid) {
-                    showAlert(`Please fill in all required fields: ${invalidFields.join(', ')}`, 'error');
-                    // Scroll to first error
-                    const firstError = form.querySelector('.form-group.error');
-                    if (firstError) {
-                        const section = firstError.closest('.form-section');
-                        section.classList.add('open');
-                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Complete Form validation
+                const invalidFields = form.querySelectorAll('input:invalid, select:invalid');
+                if (invalidFields.length > 0) {
+                    showToast("Please review and fill in all required profile fields.");
+                    
+                    // Switch to the first tab containing invalid inputs
+                    for (let i = 0; i < tabs.length; i++) {
+                        const tabContent = document.getElementById(`tab-${tabs[i]}`);
+                        if (tabContent.querySelector('input:invalid, select:invalid')) {
+                            switchTab(i);
+                            break;
+                        }
                     }
                     return;
                 }
 
-                // Show loading states
+                // Loading visual triggers
                 submitBtn.disabled = true;
-                submitText.classList.add('hidden');
-                loading.classList.add('active');
-                loadingOverlay.classList.add('active');
+                btnSpinner.style.display = 'inline-block';
+                
+                // Hide placeholder, display results loading state
+                placeholderState.style.display = 'none';
+                activeState.style.display = 'block';
+                activeState.style.opacity = '0.5';
 
                 try {
-                    // Collect form data
                     const formData = new FormData(form);
-                    const data = {};
-                    
-                    // Convert FormData to object
+                    const payload = {};
                     for (let [key, value] of formData.entries()) {
-                        data[key] = value;
+                        payload[key] = value;
                     }
 
-                    console.log('Sending data to backend:', data);
+                    console.log('Pushing payload to backend:', payload);
 
-                    // Send to backend API
                     const response = await fetch(`${API_BASE_URL}/predict`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
+                            'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(data)
+                        body: JSON.stringify(payload)
                     });
 
                     if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+                        const err = await response.json();
+                        throw new Error(err.error || `HTTP ${response.status}: Server issue`);
                     }
 
                     const results = await response.json();
-                    console.log('Received predictions:', results);
-
+                    console.log('Results from backend:', results);
+                    
+                    activeState.style.opacity = '1';
                     displayResults(results);
-                    showAlert('Predictions generated successfully!', 'success');
 
                 } catch (error) {
-                    console.error('Prediction error:', error);
-                    
-                    let errorMessage = 'An error occurred while processing your request.';
-                    
+                    console.error('Prediction request error:', error);
+                    let displayMsg = 'An error occurred during evaluations.';
                     if (error.message.includes('fetch')) {
-                        errorMessage = `Cannot connect to backend server at ${API_BASE_URL}. Please ensure the backend is running.`;
+                        displayMsg = `Unable to connect to backend server at ${API_BASE_URL}. Ensure Flask is running.`;
                     } else if (error.message) {
-                        errorMessage = error.message;
+                        displayMsg = error.message;
                     }
+                    showToast(displayMsg);
                     
-                    showAlert(errorMessage, 'error');
+                    // Fall back to placeholder
+                    placeholderState.style.display = 'block';
+                    activeState.style.display = 'none';
                 } finally {
-                    // Reset button and loading states
                     submitBtn.disabled = false;
-                    submitText.classList.remove('hidden');
-                    loading.classList.remove('active');
-                    loadingOverlay.classList.remove('active');
+                    btnSpinner.style.display = 'none';
                 }
             });
 
             function displayResults(results) {
                 let html = '';
-                
-                results.forEach((result, index) => {
-                    const config = modelConfigs[result.model] || { icon: 'ML', color: '#6b7280' };
-                    const prediction = result.prediction === 1 ? 'Will Churn' : 'Will Stay';
-                    const predictionClass = result.prediction === 1 ? 'churn' : 'no-churn';
-                    const predictionIcon = result.prediction === 1 ? '⚠️' : '✅';
-                    const confidence = (result.confidence * 100).toFixed(1);
-                    const churnProb = (result.churn_probability * 100).toFixed(1);
+                let totalChurnProb = 0;
+                let validModelsCount = 0;
+
+                results.forEach((res, index) => {
+                    const isError = res.error !== undefined;
                     
-                    html += `
-                        <div class="model-result" style="animation-delay: ${index * 0.1}s">
-                            <div class="model-header">
-                                <div class="model-name">${result.model}</div>
-                                <div class="model-icon" style="background: ${config.color}">
-                                    ${config.icon}
+                    if (!isError) {
+                        const probPercent = (res.churn_probability * 100).toFixed(0);
+                        const confidence = (res.confidence * 100).toFixed(0);
+                        const prediction = res.prediction === 1 ? 'Will Churn' : 'Will Stay';
+                        const badgeClass = res.prediction === 1 ? 'badge-churn' : 'badge-stay';
+                        
+                        totalChurnProb += parseFloat(res.churn_probability);
+                        validModelsCount++;
+
+                        html += `
+                            <div class="model-result-item" style="animation: tabFadeIn 0.5s ease forwards; animation-delay: ${index * 0.15}s;">
+                                <div class="model-result-header">
+                                    <span class="model-result-name">${res.model}</span>
+                                    <span class="model-result-badge ${badgeClass}">${prediction}</span>
+                                </div>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: ${probPercent}%"></div>
+                                </div>
+                                <div class="model-result-meta">
+                                    <span>Churn Probability: ${probPercent}%</span>
+                                    <span>Confidence: ${confidence}%</span>
                                 </div>
                             </div>
-                            
-                            <div class="prediction-section">
-                                <div class="prediction-label">Prediction</div>
-                                <div class="prediction ${predictionClass}">
-                                    <span class="prediction-icon">${predictionIcon}</span>
-                                    ${prediction}
+                        `;
+                    } else {
+                        html += `
+                            <div class="model-result-item" style="border-color: var(--color-error);">
+                                <div class="model-result-header">
+                                    <span class="model-result-name">${res.model}</span>
+                                    <span class="model-result-badge badge-churn">Error</span>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--color-error); margin-top: 0.5rem;">
+                                    ${res.error}
                                 </div>
                             </div>
-
-                            <div class="confidence-bar">
-                                <div class="confidence-fill" style="width: ${confidence}%"></div>
-                            </div>
-                            <div class="confidence-text">Confidence: ${confidence}%</div>
-
-                            <div class="probability-section">
-                                <div class="probability-label">Churn Probability</div>
-                                <div class="probability-value">${churnProb}%</div>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                resultsGrid.innerHTML = html;
-                resultsContainer.classList.add('show');
-                
-                // Smooth scroll to results
-                setTimeout(() => {
-                    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 200);
-
-                // Animate confidence bars
-                setTimeout(() => {
-                    document.querySelectorAll('.confidence-fill').forEach(fill => {
-                        fill.style.width = fill.style.width;
-                    });
-                }, 500);
-            }
-
-            // Test backend connection on page load
-            async function testBackendConnection() {
-                try {
-                    const response = await fetch(`${API_BASE_URL}/health`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('Backend connection successful:', data);
+                        `;
                     }
-                } catch (error) {
-                    console.warn('Backend not available yet:', error.message);
-                    showAlert(`Backend server not detected at ${API_BASE_URL}. Please start the backend before making predictions.`, 'error');
-                }
-            }
+                });
 
-            // Test connection after a short delay
-            setTimeout(testBackendConnection, 1000);
+                modelResultsGrid.innerHTML = html;
+
+                // Animate Risk Ring Fill
+                if (validModelsCount > 0) {
+                    const avgProb = (totalChurnProb / validModelsCount);
+                    const avgProbPercent = (avgProb * 100).toFixed(0);
+                    
+                    overallRiskText.textContent = `${avgProbPercent}%`;
+                    
+                    // Dashoffset animation: 283 is full length
+                    const offset = 283 - (283 * avgProb);
+                    riskRingFill.style.strokeDashoffset = offset;
+
+                    // Set Risk description
+                    let riskStatusText = '';
+                    let riskDescText = '';
+                    
+                    if (avgProb < 0.35) {
+                        riskStatusText = 'Low Churn Risk';
+                        riskRingFill.style.stroke = 'var(--color-success)';
+                        riskDescText = 'Customer shows strong signs of loyalty. Standard engagement recommended.';
+                    } else if (avgProb < 0.65) {
+                        riskStatusText = 'Moderate Risk';
+                        riskRingFill.style.stroke = 'var(--color-warning)';
+                        riskDescText = 'Customer displays mixed signals. Targeted retention efforts may prevent churn.';
+                    } else {
+                        riskStatusText = 'High Churn Risk';
+                        riskRingFill.style.stroke = 'var(--color-error)';
+                        riskDescText = 'Customer is highly likely to churn. Urgent proactive outreach is highly advised.';
+                    }
+
+                    overallRiskStatus.textContent = riskStatusText;
+                    overallRiskDesc.textContent = riskDescText;
+                } else {
+                    overallRiskText.textContent = '--';
+                    riskRingFill.style.strokeDashoffset = 283;
+                    overallRiskStatus.textContent = 'Indeterminate';
+                    overallRiskDesc.textContent = 'None of the machine learning algorithms could successfully produce prediction scores.';
+                }
+
+                // Smooth scroll down to results section
+                setTimeout(() => {
+                    document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
         });
     </script>
 </body>
