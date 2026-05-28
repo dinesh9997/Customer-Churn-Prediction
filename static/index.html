@@ -20,9 +20,10 @@
             --color-text-muted: #8E8D8A;
             
             --border-color: #E6E4DF;
-            --border-focus: #111111;
+            --border-focus: #c69c3a;
             
             --accent-gold: #c69c3a;
+            --accent-gold-glow: rgba(198, 156, 58, 0.15);
             --accent-blue: #3182ce;
             --accent-gold-light: rgba(246, 211, 101, 0.45);
             --accent-blue-light: rgba(79, 172, 254, 0.35);
@@ -292,7 +293,8 @@
         }
 
         .dashboard-card:hover {
-            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-gold);
+            box-shadow: 0 20px 50px rgba(198, 156, 58, 0.05);
         }
 
         .dashboard-header {
@@ -348,13 +350,13 @@
         }
 
         .tab-btn:hover {
-            color: var(--color-text-primary);
-            background-color: rgba(17, 17, 17, 0.03);
+            color: var(--accent-gold);
+            background-color: rgba(198, 156, 58, 0.05);
         }
 
         .tab-btn.active {
             color: #ffffff;
-            background-color: var(--color-text-primary);
+            background-color: var(--accent-gold);
         }
 
         /* Form Content Sections */
@@ -413,11 +415,18 @@
             appearance: none;
         }
 
+        input[type="text"]:hover,
+        input[type="number"]:hover,
+        select:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(198, 156, 58, 0.05);
+        }
+
         input[type="text"]:focus,
         input[type="number"]:focus,
         select:focus {
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.05);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px var(--accent-gold-glow);
         }
 
         /* Dropdown Chevron arrow for Select */
@@ -461,14 +470,15 @@
         }
 
         .radio-card:hover {
-            border-color: var(--color-text-primary);
-            background-color: rgba(17, 17, 17, 0.01);
+            border-color: var(--accent-gold);
+            background-color: rgba(198, 156, 58, 0.02);
+            transform: translateY(-1px);
         }
 
         /* Selected State for Custom Radio Cards */
         .radio-card.selected {
-            border-color: var(--color-text-primary);
-            background-color: var(--color-text-primary);
+            border-color: var(--accent-gold);
+            background-color: var(--accent-gold);
         }
 
         .radio-card.selected .radio-card-label {
@@ -499,8 +509,9 @@
         }
 
         .btn-nav-outline:hover {
-            border-color: var(--color-text-primary);
-            background-color: rgba(17, 17, 17, 0.02);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            background-color: rgba(198, 156, 58, 0.02);
         }
 
         .btn-nav-outline:disabled {
@@ -525,9 +536,9 @@
         }
 
         .btn-submit:hover {
-            background-color: #333333;
+            background-color: var(--accent-gold);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(17, 17, 17, 0.15);
+            box-shadow: 0 4px 15px rgba(198, 156, 58, 0.25);
         }
 
         .btn-submit:disabled {
@@ -567,7 +578,8 @@
         }
 
         .results-panel:hover {
-            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-gold);
+            box-shadow: 0 20px 50px rgba(198, 156, 58, 0.05);
         }
 
         /* Empty State Placeholder */
@@ -806,27 +818,16 @@
 <body>
 
     <!-- Header Navbar -->
-    <header class="navbar">
-        <a href="#" class="brand">churn.ai</a>
-        <nav class="nav-links">
-            <a href="#" class="dropdown">Platform</a>
-            <a href="#" class="dropdown">Solutions</a>
-            <a href="#">Resources</a>
-            <a href="#">Pricing</a>
-        </nav>
-        <div class="nav-actions">
-            <a href="#" class="btn-link">Sign In</a>
-            <a href="#dashboard" class="btn-pill-dark">Start Predicting</a>
+    <header class="navbar" style="justify-content: center; border-bottom: 1px solid var(--border-color); background: rgba(250, 249, 246, 0.8); backdrop-filter: blur(10px); position: sticky; top: 0; width: 100%; max-width: 100%; padding: 1.2rem 2rem;">
+        <div class="brand" style="font-size: 1.6rem; letter-spacing: -0.01em;">
+            churn.ai <span style="font-family: var(--font-sans); font-size: 0.95rem; font-weight: 600; color: var(--accent-gold); margin-left: 0.8rem; padding-left: 0.8rem; border-left: 1px solid var(--border-color); text-transform: uppercase; letter-spacing: 0.1em;">Customer Churn Predictor</span>
         </div>
     </header>
 
     <!-- Hero Banner (Inspired by Reference) -->
-    <section class="hero">
+    <section class="hero" style="margin-top: 3.5rem;">
         <h1>Predict and prevent customer churn with AI.</h1>
         <p>A dedicated predictor for every customer. Harness multiple state-of-the-art machine learning models running tailored evaluations 24/7.</p>
-        <a href="#dashboard" class="btn-pill-dark">
-            See AI Demo <span>→</span>
-        </a>
 
         <!-- Premium Gradient Fluid Wave -->
         <div class="wave-container">
@@ -836,7 +837,7 @@
 
         <!-- Trusted Model Logo Row Cloud -->
         <div class="logo-cloud">
-            <div class="logo-cloud-title">POWERED BY TRUSTED MACHINE LEARNING ALGORITHMS</div>
+            <div class="logo-cloud-title">MACHINE LEARNING ALGORITHMS</div>
             <div class="logo-grid">
                 <div class="logo-item"><span>❖</span> Logistic Regression</div>
                 <div class="logo-item"><span>✦</span> Decision Tree</div>
